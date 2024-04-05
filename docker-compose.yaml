@@ -1,0 +1,57 @@
+version: '3.6'
+
+services:
+  db:
+    image: postgres:15.3
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+
+  rabbit:
+    image: "rabbitmq:3-management"
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: uvicorn src.main:app --host 0.0.0.0 --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./src:/code/src"
+    depends_on:
+      - db
+      - rabbit
+    environment:
+      - PYTHONPATH=src
+      - PYTHONUNBUFFERED=1
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: dramatiq src.worker -p 2
+    volumes:
+      - "./src:/code/src"
+    depends_on:
+      - db
+      - rabbit
+    environment:
+      - PYTHONPATH=src
+
