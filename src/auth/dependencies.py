@@ -1,18 +1,15 @@
-from fastapi import Request, Depends
+from fastapi import Depends, Request
 
-from auth.services import AuthJWTService
 from auth.exceptions import PermissionDenied, UnauthorizedException
+from auth.services import AuthJWTService
 
 
 class AuthDependency:
-    AUTH_HEADER_KEY = 'Authorization'
+    AUTH_HEADER_KEY = "Authorization"
 
     def __init__(
-            self,
-            request: Request,
-            token_type: str = AuthJWTService.ACCESS_TOKEN_TYPE,
-            extract_from_headers: bool=True
-        ):
+        self, request: Request, token_type: str = AuthJWTService.ACCESS_TOKEN_TYPE, extract_from_headers: bool = True
+    ):
         self._auth = AuthJWTService()
         self._token = self._payload = None
 
@@ -50,22 +47,19 @@ class AuthDependency:
         return parts[1]
 
     def refresh_access_token(self):
-        return self._auth.create_refresh_token(
-            self.get_user_sub(),
-            self.get_user_claims()
-        )
+        return self._auth.create_refresh_token(self.get_user_sub(), self.get_user_claims())
 
     def get_user_claims(self):
         return self._auth.extract_user_claims(self.payload)
 
     def get_user_sub(self):
-        return self._auth.decode_token(self._token)['sub']
+        return self._auth.decode_token(self._token)["sub"]
 
     def get_user_pk(self):
-        return self.get_user_claims()['user_pk']
+        return self.get_user_claims()["user_pk"]
 
     def get_user_role(self):
-        return self.get_user_claims()['user_role']
+        return self.get_user_claims()["user_role"]
 
 
 def validate_permissions(roles):

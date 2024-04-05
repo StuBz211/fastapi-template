@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     MAIL_PORT: int = 1025
     MAIL_LOGIN: str | None = None
     MAIL_PASSWORD: str | None = None
-    MAIL_FROM: str = 'template@fastapi.ru'
+    MAIL_FROM: str = "template@fastapi.ru"
 
     # infa settings
     DATABASE_URL: str

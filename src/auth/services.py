@@ -1,18 +1,15 @@
-from dataclasses import dataclass, asdict
 import uuid
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
+
+from jose import JOSEError, jwt
 
 import core_exceptions
-from user.models import User
+from auth.exceptions import InvalidToken, InvalidTokenType
 from config import settings
-
-from datetime import timedelta, datetime
-from jose import jwt, JOSEError
-
-from user.password import verify_password
-
 from user import crud as user_crud
-
-from auth.exceptions import InvalidTokenType, InvalidToken
+from user.models import User
+from user.password import verify_password
 
 
 @dataclass
@@ -29,16 +26,16 @@ class AuthUserClaims:
 
 
 class AuthJWTService:  # TODO find async library?
-    ACCESS_TOKEN_TYPE = 'access'
-    REFRESH_TOKEN_TYPE = 'refresh'
-    RESET_PASSWORD_TOKEN_TYPE = 'reset'
-    USER_ACTIVATE_TOKEN_TYPE = 'activate'
+    ACCESS_TOKEN_TYPE = "access"
+    REFRESH_TOKEN_TYPE = "refresh"
+    RESET_PASSWORD_TOKEN_TYPE = "reset"
+    USER_ACTIVATE_TOKEN_TYPE = "activate"
     CUSTOM_TOKEN_TYPES = (RESET_PASSWORD_TOKEN_TYPE, USER_ACTIVATE_TOKEN_TYPE)
-    TOKEN_CLAIMS = ("jti", 'iat', 'exp', 'sub', 'type')
+    TOKEN_CLAIMS = ("jti", "iat", "exp", "sub", "type")
 
     def decode_token_type(self, token: str, token_type: str):
         payload = self.decode_token(token)
-        if payload['type'] != token_type:
+        if payload["type"] != token_type:
             raise InvalidTokenType("Invalid token type")
         return payload
 
@@ -56,9 +53,7 @@ class AuthJWTService:  # TODO find async library?
 
     def extract_user_claims(self, payload):
         return {
-            claim_key: claim_value
-            for claim_key,claim_value in payload.items()
-            if claim_key not in self.TOKEN_CLAIMS
+            claim_key: claim_value for claim_key, claim_value in payload.items() if claim_key not in self.TOKEN_CLAIMS
         }
 
     @staticmethod
@@ -75,15 +70,10 @@ class AuthJWTService:  # TODO find async library?
     def _get_token_claims(self, token_type: str):
         iat = datetime.utcnow()
 
-        return {
-            'jti': self._get_jti(),
-            'iat': iat,
-            'exp': self._get_expire(iat, token_type),
-            'type': token_type
-        }
+        return {"jti": self._get_jti(), "iat": iat, "exp": self._get_expire(iat, token_type), "type": token_type}
 
-    def _create_token(self, sub: str, user_claims: dict, token_type: str ):
-        to_encode = {**user_claims, 'sub': sub}
+    def _create_token(self, sub: str, user_claims: dict, token_type: str):
+        to_encode = {**user_claims, "sub": sub}
         to_encode.update(self._get_token_claims(token_type))
         return jwt.encode(to_encode, settings.JWT_PRIVATE_KEY, algorithm=settings.ALGORITHM)
 
@@ -122,4 +112,4 @@ def create_token_pair_by_user(user: User) -> dict[str, str]:
     auth_service = AuthJWTService()
     refresh_token = auth_service.create_refresh_token(sub, user_claims)
     access_token = auth_service.create_access_token(sub, user_claims)
-    return {'access': access_token, 'refresh': refresh_token}
+    return {"access": access_token, "refresh": refresh_token}

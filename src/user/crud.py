@@ -1,19 +1,16 @@
 import logging
 
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
-from sqlalchemy.exc import IntegrityError
 
-from user import models
-
-from user import schemas
+from core_exceptions import BadRequestsException, NotFoundException
+from user import models, schemas
 from user.password import hash_password
-
-from core_exceptions import NotFoundException, BadRequestsException
 
 
 class UserNotFound(NotFoundException):
-    detail = 'User not found'
+    detail = "User not found"
 
 
 class UserAlreadyExists(BadRequestsException):
@@ -29,8 +26,8 @@ async def create(session: AsyncSession, user: schemas.UserCreate) -> models.User
     try:
         await session.commit()
     except IntegrityError as exc:
-        logging.warning('Handled IntegrityError', exc_info=exc)
-        raise UserAlreadyExists(detail=f'User with email: {user.email}, already exists')
+        logging.warning("Handled IntegrityError", exc_info=exc)
+        raise UserAlreadyExists(detail=f"User with email: {user.email}, already exists")
     await session.refresh(db_user)
     return db_user
 
@@ -72,4 +69,3 @@ async def delete_by_id(session: AsyncSession, user_id: int) -> bool | NotFoundEx
     await session.delete(user)
     await session.commit()
     return True
-

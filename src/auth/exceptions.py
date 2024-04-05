@@ -4,7 +4,7 @@ from core_exceptions import UnauthorizedException as UnauthorizedExceptionBase
 
 
 class PermissionDenied(PermissionDeniedBase):
-    detail= "Permission Denied"
+    detail = "Permission Denied"
     description = "Not enough privileges"
     status_code = 403
 
@@ -15,7 +15,7 @@ class UnauthorizedException(UnauthorizedExceptionBase):
 
 class AuthLoginException(BaseAPIException):
     detail = "Incorrect username or password"
-    description = ''
+    description = ""
     status_code = 400
 
 
@@ -27,5 +27,3 @@ class InvalidToken(BaseAPIException):
 
 class InvalidTokenType(InvalidToken):
     detail = "Invalid token type"
-
-

@@ -4,6 +4,7 @@ from pydantic import BaseModel, EmailStr
 class TokenPayload(BaseModel):
     token: str
 
+
 class TokenPairSchema(BaseModel):
     access: str
     refresh: str
@@ -16,5 +17,3 @@ class AccessTokenSchema(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
-
-

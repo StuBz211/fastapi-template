@@ -40,3 +40,24 @@ aiosqlite = "^0.20.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+exclude = """
+/(
+| alembic
+| .venv
+| venv
+)/"""
+line-length = 120
+
+[tool.isort]
+line_length = 120
+skip_glob = ["alembic"]
+profile = "black"
+
+[tool.autoflake]
+check = false
+exclude = ["alembic"]
+in-place = true
+recursive = true
+remove-all-unused-imports = true

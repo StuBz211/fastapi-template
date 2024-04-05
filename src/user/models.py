@@ -1,10 +1,11 @@
 import enum
-from sqlmodel import SQLModel, Field, Relationship, Enum
+
+from sqlmodel import Field, SQLModel
 
 
 class RolesEnum(enum.Enum):
-    USER = 'user'
-    ADMIN = 'admin'
+    USER = "user"
+    ADMIN = "admin"
 
 
 # class Role(SQLModel, table=True):
@@ -21,5 +22,3 @@ class User(SQLModel, table=True):
     role: str = Field(default=RolesEnum.USER.value)
     # role_pk: int | None = Field(default=None, foreign_key="role.pk")
     # role: Role | None = Relationship(back_populates="users")
-
-

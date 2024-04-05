@@ -1,5 +1,3 @@
-
-
 class BaseAPIException(Exception):
     detail = NotImplemented
     status_code = NotImplemented
@@ -20,11 +18,7 @@ class BaseAPIException(Exception):
 
     @property
     def content(self):
-        return {
-            "application/json": {
-                "example": {"detail": self.detail}
-            }
-        }
+        return {"application/json": {"example": {"detail": self.detail}}}
 
     def example(self) -> dict:
         return {self.description: {"value": {"detail": self.detail}}}
@@ -48,7 +42,3 @@ class PermissionDenied(BaseAPIException):
 class NotFoundException(BaseAPIException):
     status_code = 404
     detail = "Object Not found"
-
-
-
-

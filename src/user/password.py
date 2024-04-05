@@ -1,4 +1,3 @@
-
 import bcrypt
 
 
@@ -13,4 +12,3 @@ def verify_password(plain_password, hashed_password) -> bool:
     hashed_password = hashed_password.encode("utf-8")
     password_byte_enc = plain_password.encode("utf-8")
     return bcrypt.checkpw(password=password_byte_enc, hashed_password=hashed_password)
-
