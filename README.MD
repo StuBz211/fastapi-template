@@ -1,6 +1,6 @@
 # Fastapi-template
 
-## app includes 
+## app includes
 #### User model and basic user routes
 #### Simple auth implementation and etc.
 
@@ -30,17 +30,24 @@ Add new deps to dev or test dependency.
 poetry add <new_lib> --group=dev
 ```
 
+### Pre-commit hooks
+It should be work in active environment
+```shell
+pre-commit install
+```
+in first commit it require more time for install hooks dependencies.
 
 
 
-## Migrations 
+
+## Migrations
 generate migrations
 
 ```shell
 alembic revision --autogenerate -m "init"
 ```
 
-apply migrations 
+apply migrations
 ```shell
 alembic upgrade head
 ```
@@ -52,12 +59,12 @@ export DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/postgr
 
 
 ## Start apps
-in docker 
+in docker
 ```shell
 docker-compose up -d
 ```
 
-Maybe requires 
+Maybe requires
 ```shell
 export PYTHONPATH=src
 ```
@@ -81,7 +88,7 @@ dramatiq src.worker -p 4
 /user - user model and routes
 /worker - dramatiq worker, implement task here.
 
-about all routes can get info from 
+about all routes can get info from
 
 http://127.0.0.1:8000/docs
 
@@ -129,4 +136,3 @@ curl -X GET "http://127.0.0.1:8000/users/me" \
 ```shell
 curl -X GET "http://127.0.0.1:8000/users/me?token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3JvbGUiOiJ1c2VyIiwidXNlcl9wayI6MSwic3ViIjoibWFpbEBleGFtcGxlLmNvbSIsImp0aSI6Ijk0MzQxYTlhLWRiYmItNDg1NC1hYTFmLWQ4MTZlODMwYjcyNCIsImlhdCI6MTcxMjIzOTY2MywiZXhwIjoxNzEyMzI2MDYzLCJ0eXBlIjoiYWN0aXZhdGUifQ.RqFkJCKldjj43Ls26T7OysepMlRjhr4G9UuqDHx4TAr66kGjwMf22pO4iGI0M-J7UswmQj68ycTZVAIX0HeQxkYqf-Sdl95mHK9aUl-xCQVHn-CL8h_rc9NZLDpOM6Hj_rNA_rq_1Urv4yj91OxvgkLSzmwSzOw2TF1l9WUToCxA1cVasMU6ARa-mMwPjS7imu7nnvcvuJxKC5JkocXMWpTL3aRaFALSUOJoCOPCWAaTCVExd5Z-fjG5ob-c5QEqSXPF9zoHdCAQREHyEeCJ0wyVb066BGdH9-LqI9fMsvVG8AUkdI1JdnH5wg1UbH9cUGa7wvhuirNAn8bp0uTb2Nm05qlTdL4zaPpcCAVs8UBiWyGaEEgPYRBXm5FTzFJtBAVvkjkh4kPdcT0DiF3mcw5-3gFJpdPaewiMaJ9QPueL32-xDaB9f8wIJxd0lZbK1Z39nICX0rXAX5E3HIVJTxOWZ7_ZnC4uTmLiOV6QAgCMcn81LGjqO57r6OCqlv6GG-cXr8_IMH2ghlmBWFVPcWUWLvsQ3kDkZnmimTirfdrK1M0JhAjPHA-5-1c7XqgiAOp787EqmTel21uJ0v-xAMNSa-YcP1u97JAPpsBDrCmrKmtlhIYbJkYenYlMsZ3R5HOCXoM0B7lrLX6dDr1lrsso71aKivgfIYsVn1XjEzE
 ```
-
