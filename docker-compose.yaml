@@ -9,6 +9,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
 
   rabbit:
     image: "rabbitmq:3-management"
@@ -54,4 +56,3 @@ services:
       - rabbit
     environment:
       - PYTHONPATH=src
-

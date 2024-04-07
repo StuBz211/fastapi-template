@@ -15,6 +15,7 @@ class UserUpdate(UserBase):
 
 class User(UserBase):
     pk: int
+    activated: bool
 
     class Config:
         from_attributes = True

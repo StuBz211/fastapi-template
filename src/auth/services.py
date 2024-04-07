@@ -25,7 +25,7 @@ class AuthUserClaims:
         return asdict(self)
 
 
-class AuthJWTService:  # TODO find async library?
+class TokenProvider:  # TODO find async library?
     ACCESS_TOKEN_TYPE = "access"
     REFRESH_TOKEN_TYPE = "refresh"
     RESET_PASSWORD_TOKEN_TYPE = "reset"
@@ -101,15 +101,15 @@ async def authenticate_user(session, email: str, password: str) -> User | bool:
 def create_activate_token_by_user(user: User) -> str:
     sub = user.email
     user_claims = AuthUserClaims.from_user(user).as_dict()
-    auth_service = AuthJWTService()
-    return auth_service.create_token(sub, user_claims, auth_service.USER_ACTIVATE_TOKEN_TYPE)
+    token_provider = TokenProvider()
+    return token_provider.create_token(sub, user_claims, token_provider.USER_ACTIVATE_TOKEN_TYPE)
 
 
 def create_token_pair_by_user(user: User) -> dict[str, str]:
     sub = user.email
     user_claims = AuthUserClaims.from_user(user).as_dict()
 
-    auth_service = AuthJWTService()
-    refresh_token = auth_service.create_refresh_token(sub, user_claims)
-    access_token = auth_service.create_access_token(sub, user_claims)
+    token_provider = TokenProvider()
+    refresh_token = token_provider.create_refresh_token(sub, user_claims)
+    access_token = token_provider.create_access_token(sub, user_claims)
     return {"access": access_token, "refresh": refresh_token}
